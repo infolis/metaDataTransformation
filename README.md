@@ -2,17 +2,17 @@
 This project transforms different kinds of meta data formats into the XML format we used for the data ingestion.
 
 SSOAR: 
-```java
+```
 java -cp JAR infolis.metaDataTransformer.ssoar.SSOARTransformator INPUTDIR OUTPUTDIR
 ```
 
 ICPSR:
-```java
+```
 java -cp JAR infolis.metaDataTransformer.icpsr.ICPSRTransformer INPUTDIR OUTPUTDIR
 ```
 
 Springer:
-```java
+```
 java -cp JAR infolis.metaDataTransformer.springer.SpringerTransformer INPUTDIR METAOUTPUT TEXTOUTPUT
 ```
 
