@@ -36,9 +36,9 @@ public class SSOARTransformator {
         File inDir = new File(inputPath);
         for (File f : inDir.listFiles()) {
 
-            String lang = null, abstractDesc = null, title = null;
+            String lang = null, abstractDesc = null, title = null, recordIdentifier = null;
             List<String> authors = new ArrayList<>(), subjects = new ArrayList<>(), 
-            identifiers = new ArrayList<>();
+            datasetIdentifiers = new ArrayList<>();
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -47,7 +47,7 @@ public class SSOARTransformator {
             NodeList fieldNodesHeader = doc.getElementsByTagName("ns0:identifier");
             for (int j = 0; j < fieldNodesHeader.getLength(); j++) {
                 Node fieldNode = fieldNodesHeader.item(j);
-                identifiers.add(fieldNode.getTextContent());
+                recordIdentifier = fieldNode.getTextContent();
             }
 
             NodeList fieldNodesBegin = doc.getElementsByTagName("ns1:dcvalue");
@@ -87,12 +87,12 @@ public class SSOARTransformator {
                         title = fieldNode.getTextContent();
                     }
                     if (element.getTextContent().equals("identifier")) {
-                        identifiers.add(fieldNode.getTextContent());
+                        datasetIdentifiers.add(fieldNode.getTextContent());
                     }
                 }
             }
            
-            OutputWriter writer = new OutputWriter(lang, abstractDesc, title, identifiers, authors, subjects, outputPath, f.getName());
+            OutputWriter writer = new OutputWriter(lang, abstractDesc, title, recordIdentifier, datasetIdentifiers, authors, subjects, outputPath, f.getName());
             writer.writeOutput();
             
         }
