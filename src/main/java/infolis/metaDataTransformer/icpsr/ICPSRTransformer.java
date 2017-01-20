@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,8 +32,12 @@ public class ICPSRTransformer {
                 Publication p = gson.fromJson(read, Publication.class);
 
                 String title = p.getMetadata().getZotero()[0].getTitle();
-                String identifier = p.getDoi();
+                String recordIdentifier = null;
+                // TODO other identifiers?
+                List<String> identifiers = new ArrayList<>();
+                identifiers.add(p.getDoi());
                 String url = p.getUrl();
+                identifiers.add(url);
                 String abstractDesc = p.getMetadata().getZotero()[0].getAbstractNote();
                 String language = p.getMetadata().getZotero()[0].getLanguage();
                 Creator[] authors = p.getMetadata().getZotero()[0].getCreators();
@@ -44,7 +50,7 @@ public class ICPSRTransformer {
                     subjects = p.getMetadata().getCrossRefWorks().getSubject();
                 }
 
-                OutputWriter write = new OutputWriter(language, abstractDesc, title, identifier, url, Arrays.asList(authorsStrings), Arrays.asList(subjects), outputPath, f.getName());
+                OutputWriter write = new OutputWriter(language, abstractDesc, title, recordIdentifier, identifiers, Arrays.asList(authorsStrings), Arrays.asList(subjects), outputPath, f.getName());
                 write.writeOutput();
             } catch (Exception e) {
                 System.out.println(f.getName());

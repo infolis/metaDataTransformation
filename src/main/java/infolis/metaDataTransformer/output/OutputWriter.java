@@ -21,16 +21,29 @@ import org.w3c.dom.Element;
  */
 public class OutputWriter {
 
-    String lang = null, abstractDesc = null, title = null, identifier = null, uri = null;
-    List<String> authors = new ArrayList<>(), subjects = new ArrayList<>();
+    String lang = null, abstractDesc = null, title = null, recordIdentifier = null, uri = null;
+    List<String> authors = new ArrayList<>(), subjects = new ArrayList<>(), datasetIdentifiers = new ArrayList<>();
     String outputPath = null, fileName = null;
     
-    public OutputWriter(String lang, String abstractDesc, String title, String identifier, String uri, List<String> authors, List<String> subjects, String outputPath, String fileName) {
+    public OutputWriter(String lang, String abstractDesc, String title, String recordIdentifier, String uri, List<String> authors, List<String> subjects, String outputPath, String fileName) {
         this.lang = lang;
         this.abstractDesc = abstractDesc;
         this.title = title;
-        this.identifier = identifier;
+        this.recordIdentifier = recordIdentifier;
         this.uri = uri;
+        this.authors = authors;
+        this.subjects = subjects;
+        this.outputPath = outputPath;
+        this.fileName = fileName;
+    }
+    
+    public OutputWriter(String lang, String abstractDesc, String title, String recordIdentifier, 
+    List<String> datasetIdentifiers, List<String> authors, List<String> subjects, String outputPath, String fileName) {
+        this.lang = lang;
+        this.abstractDesc = abstractDesc;
+        this.title = title;
+        this.recordIdentifier = recordIdentifier;
+        this.datasetIdentifiers = datasetIdentifiers;
         this.authors = authors;
         this.subjects = subjects;
         this.outputPath = outputPath;
@@ -50,9 +63,11 @@ public class OutputWriter {
             node.appendChild(header);
 
             // append child elements to root element
-            Element identifierEle = docOut.createElement("identifier");
-            identifierEle.setTextContent(identifier);
-            header.appendChild(identifierEle);
+            if (null != recordIdentifier) {
+                Element identifierEle = docOut.createElement("identifier");
+                identifierEle.setTextContent(recordIdentifier);
+                header.appendChild(identifierEle);
+            }
 
             Element metadata = docOut.createElement("metadata");
             node.appendChild(metadata);
@@ -72,9 +87,17 @@ public class OutputWriter {
             langEle.setTextContent(lang);
             ns1.appendChild(langEle);
 
-            Element uriEle = docOut.createElement("dc:identifier");
-            uriEle.setTextContent(uri);
-            ns1.appendChild(uriEle);
+            if (null != uri) {
+                Element uriEle = docOut.createElement("dc:identifier");
+                uriEle.setTextContent(uri);
+                ns1.appendChild(uriEle);
+            }
+            
+            for (String id : datasetIdentifiers) {
+                Element idEle = docOut.createElement("dc:identifier");
+                idEle.setTextContent(id);
+                ns1.appendChild(idEle);
+            }
 
             Element absEle = docOut.createElement("dc:description");
             absEle.setTextContent(abstractDesc);
